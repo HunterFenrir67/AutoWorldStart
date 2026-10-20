@@ -1,9 +1,0 @@
-{
-  "name": "AutoWorldStart",
-  "version_number": "1.0.3",
-  "website_url": "",
-  "description": "Automatically loads your selected world and character. Optional intro skip and pause after loading. / Автозагрузка мира и персонажа, пропуск заставки и пауза.",
-  "dependencies": [
-    "denikson-BepInExPack_Valheim-5.4.2351"
-  ]
-}
