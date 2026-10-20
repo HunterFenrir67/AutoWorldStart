@@ -1,29 +1,33 @@
-# AutoWorldStart-1.0.3
+# AutoWorldStart
 
-Автор / Author: HunterFenrir67
-
-Автоматически загружает выбранный мир и персонажа при запуске Valheim.
 Automatically loads your selected world and character when Valheim starts.
+Автоматически загружает выбранный мир и персонажа при запуске Valheim.
 
-<img src="https://drive.google.com/thumbnail?id=1YpTh2yoNsoor7qq27KB5d-2fxH2c9n99&amp;sz=w250" alt="Пропуск меню / Skip menu" width="250" height="250"> <img src="https://drive.google.com/thumbnail?id=1BesiCpikxSbybdFZn8_D1NNnmCy0v5AF&amp;sz=w250" alt="Пропуск заставки / Skip intro" width="250" height="250">
+Maintainer / Поддержка: HunterFenrir67 (Thunderstore team: Hunter9732ru).
+Based on Simple Auto Game Start by ABearCodes. Licensed under MIT; see LICENSE.
 
-## Русский
+## Исходники / Source
 
-- Требуются Valheim и BepInExPack.
-- Пропускает стартовую видеозаставку, если SkipIntroVideo включён.
-- Скрывает лес и персонажа фона меню при ожидающей автозагрузке. Служебная сцена меню всё ещё загружается штатно. При ошибке или отмене фон возвращается.
-- После готовности персонажа и HUD наблюдает ввод 1 секунду. Клавиша или движение мыши отменяет будущую паузу без открытия Esc. Если ввода нет, ставит одиночную игру на паузу без меню Esc. Последующий ввод снимает паузу.
-- F7 включает/выключает настройку паузы после входа. F8 включает/выключает автозагрузку. Это переключатели настроек, а не кнопки открытия/закрытия меню. Настройки сохраняются.
-- При отключении F7 во время автоматической паузы она снимается. Открытое вручную меню Esc не затрагивается.
-- После выхода из мира автозагрузка повторно не запускается.
+Исходная версия проекта: 1.0.3. Plugin.cs восстановлен из сохранённого исходника 1.1.6; в последующих выпусках этой ветки менялись метаданные версии и оформление пакета. Проект сборки добавлен отдельно. Новая компиляция и проверка в игре для этого архива не выполнялись.
 
-## English
+Source release: 1.0.3. Plugin.cs was recovered from the retained 1.1.6 source; later releases in this branch changed version metadata and package presentation. The build project was added separately. This source archive has not been newly compiled or tested in-game.
 
-Requires Valheim and BepInExPack. Skips the startup video when SkipIntroVideo is enabled. Hides menu scenery during pending autoload; the game's menu scene still initializes normally. Cancellation or errors restore the background.
+## Возможности / Features
 
-After player/HUD readiness, observes input for 1 second. Any key or mouse movement cancels the pending pause without opening Esc. Without input, pauses single-player silently without Esc; later input resumes play. F7 toggles the after-entry pause setting; F8 toggles autoload. Settings persist. These are setting toggles, not manual menu buttons. Turning F7 off releases an owned automatic pause; manually opened menus are unaffected. Logging out does not repeat autoload.
+- Автозагрузка существующего локального мира и персонажа по именам, один раз за запуск игры.
+- Пропуск вступительного видео и скрытие фона меню во время ожидающей автозагрузки.
+- Пауза в одиночной игре без открытия Esc, если после входа не было ввода в течение заданного времени (по умолчанию 1 секунда). Последующий ввод снимает автоматическую паузу.
+- F7 переключает настройку паузы после входа, F8 — автозагрузку.
+- Работает на клиенте; серверу мод не нужен.
 
-## Configuration
+Loads an existing local world and character once per game launch. Supports intro skipping, temporary menu-background hiding, and an input-sensitive single-player pause after loading. F7 toggles the after-entry pause setting; F8 toggles autoload. Client only.
+
+## Настройка / Configuration
+
+`BepInEx/config/hunter9732ru.autoworldstart.cfg`
+
+Укажите точные названия уже созданного мира и персонажа, как в игре.
+Enter the exact names of an existing world and character as displayed in-game.
 
 ```ini
 [AutoWorldStart]
@@ -39,29 +43,35 @@ TogglePauseAfterLoad = F7
 ToggleAutoLoad = F8
 ```
 
-Если автозагрузка не запускается, проверьте настройки WorldName и PlayerName: укажите точные названия уже созданного мира и персонажа, как они отображаются в игре. Старые настройки Simple Auto Game Start читаются автоматически, если нет собственных значений AutoWorldStart.
-If autoload does not start, check WorldName and PlayerName: enter the exact names of an existing world and character as displayed in the game. Legacy Simple Auto Game Start settings are read when AutoWorldStart has no values of its own.
+Не устанавливайте одновременно с Simple Auto Game Start.
+Do not install alongside Simple Auto Game Start.
 
-## Configuration: PauseInputWindowSeconds
+## Сборка / Build
 
-Время после готовности персонажа, в течение которого ввод отменяет будущую паузу. По умолчанию 1 секунда; диапазон 0,1–30 секунд. Изменение применяется при следующем входе.
-Seconds after player/HUD readiness during which input cancels the pending pause. Default: 1; range: 0.1–30 seconds. Changes apply on the next entry.
+Нужны .NET SDK, установленный Valheim и BepInEx 5. DLL игры и BepInEx в репозиторий не входят. Используйте свои локальные файлы. Если BepInEx находится в профиле Gale/r2modman, передайте его путь отдельно.
+
+Requires a .NET SDK, a local Valheim installation, and BepInEx 5. Game and BepInEx assemblies are not included. Set BepInExPath separately when using a mod-manager profile.
+
+PowerShell / Windows:
+
+```powershell
+dotnet build AutoWorldStart.csproj -c Release -p:ValheimPath="F:/Steam/steamapps/common/Valheim"
+```
+
+С отдельной папкой BepInEx / With a separate BepInEx directory:
+
+```powershell
+dotnet build AutoWorldStart.csproj -c Release -p:ValheimPath="F:/Steam/steamapps/common/Valheim" -p:BepInExPath="D:/YourProfile/BepInEx"
+```
+
+Результат / Output: `bin/Release/net472/AutoWorldStart.dll`.
+
+Для выпуска с другим номером измените BepInPlugin в Plugin.cs и Version в AutoWorldStart.csproj; manifest.json пакета должен содержать тот же номер. GUID оставьте неизменным для сохранения настроек.
+
+For another release number, update BepInPlugin in Plugin.cs and Version in AutoWorldStart.csproj; use the same number in the package manifest.json. Keep the plugin GUID unchanged to preserve configuration identity.
 
 ## Поддержка / Support
 
-Если мод оказался полезен, можно поддержать разработку добровольным донатом. Мод остаётся бесплатным.
-If you find this mod useful, you can support development with a voluntary donation. The mod remains free.
-
-<a href="https://ko-fi.com/hunterfenrir"><img src="https://storage.ko-fi.com/cdn/kofi5.png?v=6" alt="Support on Ko-fi" width="125" height="31"></a> <a href="https://paypal.me/HunterFenrir67"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" alt="Support on PayPal" width="50" height="31"></a>
+Мод бесплатный. Пожертвования добровольные. The mod is free; donations are optional.
 
 [Ko-fi](https://ko-fi.com/hunterfenrir) · [PayPal](https://paypal.me/HunterFenrir67)
-
-## Социальные сети / Social links
-
-[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/wsaFn6y6)
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@HunterFenrir67)
-[![Steam](https://img.shields.io/badge/Steam-171A21?style=for-the-badge&logo=steam&logoColor=white)](https://steamcommunity.com/profiles/76561199009317610/)
-
-- [Discord — сервер HunterFenrir67 / community server](https://discord.gg/wsaFn6y6)
-- [YouTube — @HunterFenrir67](https://www.youtube.com/@HunterFenrir67)
-- [Steam — профиль / profile](https://steamcommunity.com/profiles/76561199009317610/)
